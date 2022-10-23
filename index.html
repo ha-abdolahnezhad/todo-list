@@ -28,24 +28,25 @@
                 <div class="tab-pane fade show active mt-5" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
                     <div class="row justify-content-center h-50">
                         <div class="col-md-6">
-                            <div class="row">
-                                <label for="title">Title <span class="text-danger">*</span></label>
-                                <input type="text" id="title">
-                                <span class="title-message d-none"></span>
-                            </div>
-                            <div class="row">
-                                <label for="description">Description</label>
-                                <input type="text" id="description">
-                            </div>
-                            <div class="row">
-                                <label for="date">Due Date <span class="text-danger">*</span></label>
-                                <input type="date" id="date">
-                                <span class="date-message d-none"></span>
-                            </div>
-                            <div class="row mt-3">
-                                <button class="btn btn-primary" id="btn-submit">Submit</button>
-                                <button class="btn btn-warning d-none" id="btn-save">Save</button>
-                            </div>
+                            <form action="" id="form">
+                                <div class="row">
+                                    <label for="title">Title <span class="text-danger">*</span></label>
+                                    <input type="text" id="title">
+                                    <span class="title-message d-none"></span>
+                                </div>
+                                <div class="row">
+                                    <label for="description">Description</label>
+                                    <input type="text" id="description">
+                                </div>
+                                <div class="row">
+                                    <label for="date">Due Date <span class="text-danger">*</span></label>
+                                    <input type="date" id="date">
+                                    <span class="date-message d-none"></span>
+                                </div>
+                                <div class="row mt-3">
+                                    <button class="btn btn-primary" id="btn-submit">Submit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

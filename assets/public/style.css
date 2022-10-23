@@ -14,6 +14,11 @@
     border: none;
 }
 
+.btn-edit {
+    background-color: inherit;
+    border: none;
+}
+
 .box:hover .icon {
     visibility: visible;
 }

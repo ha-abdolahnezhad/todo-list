@@ -1,6 +1,5 @@
 const todos = document.querySelector("#todos-tab");
 const submit = document.querySelector("#btn-submit");
-const save = document.querySelector("#btn-save");
 const title = document.querySelector("#title");
 const description = document.querySelector("#description");
 const dueDate = document.querySelector("#date");
@@ -17,6 +16,14 @@ let info = {};
 //regex
 const titleRegex = /^([a-zA-Z0-9_-\s]){2,15}$/;
 // get data from api
+
+window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('id')) {
+        getDataById(urlParams.get('id'));
+    }
+}
+
 function getData() {
     todosList.innerHTML = `<div class="d-flex justify-content-center">
                                 <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
@@ -97,8 +104,8 @@ function sendData(obj) {
 }
 
 function updateData(obj) {
-    console.log('info', obj);
-    fetch(`https://6347f21b0484786c6e8d835e.mockapi.io/todos/${obj.id}`, {
+    const id = new URLSearchParams(window.location.search).get('id');
+    fetch(`https://6347f21b0484786c6e8d835e.mockapi.io/todos/${id}`, {
         method: 'PUT',
         headers: {
         'Content-Type': 'application/json',
@@ -112,13 +119,14 @@ function updateData(obj) {
             alertMessageElement.textContent = "information updated successfully";
             alert.appendChild(alertMessageElement);
             alert.classList.add('show');
-            setInterval(() => {
-                location.reload();
-            }, 2000);
+            document.querySelector("#form").reset();
+            submit.classList.replace('btn-warning', 'btn-primary');
+            submit.textContent = "Submit";
+            window.history.replaceState({}, document.title, "/");
         } else if(response.status === 404) {
             setInterval(() => {
                 location.href = "404.html";
-            }, 10000);
+            }, 2000);
             
         }
     })
@@ -134,6 +142,7 @@ function updateData(obj) {
 }
 
 function validate(event) {
+    event.preventDefault();
     if(title.value.match(titleRegex)) {
         info.title = title.value;
         title.textContent = "";
@@ -162,9 +171,10 @@ function validate(event) {
     info.checked = false;
 
     if(info.title && info.dueDate) {
-        if(event.target.id === "btn-submit") {
+        const urlParams = new URLSearchParams(window.location.search);
+        if(!urlParams.has('id')) {
             sendData(info);
-        } else if (event.target.id === "btn-save") {
+        } else if (urlParams.has('id')) {
             updateData(info);
         }
     }
@@ -174,16 +184,12 @@ function setData(item) {
     title.value = item.title;
     description.value = item.description;
     dueDate.value = item.dueDate;
-    submit.classList.add('d-none');
-    save.classList.remove('d-none');
-    info.id = item.id;
+    submit.classList.replace('btn-primary', 'btn-warning');
+    submit.textContent = "Save";
 }
 
 function editFunc(event) {
-    const id = event.target.dataset.id;
-    const triggerEl = document.querySelector('#myTab button[data-bs-target="#home-tab-pane"]');
-    bootstrap.Tab.getInstance(triggerEl).show();
-    getDataById(id); 
+    window.location.href = `http://127.0.0.1:5500/?id=${event.target.dataset.id}`;
 }
 
 function deleteFunc(event) {
@@ -232,7 +238,6 @@ function deleteData(id) {
 let currentPage = 1;
 let rows = 5;
 function renderData(listItems) {
-    console.log('renderData', listItems);
     DisplayList(listItems, todosList , rows , currentPage);
     setupPagination(listItems, paginationElement , rows);
 }
@@ -254,7 +259,9 @@ function DisplayList(items , wrapper, rows, currentPage){
                                     <span class="fs-6 fw-lighter">${item.dueDate}</span>
                                     <p class="fs-6 fw-lighter d-block mt-2">${item.description}</p>
                                     <div class="position-absolute icon">
-                                        <i data-id="${item.id}" class="bi bi-pencil-fill m-1" id="edit" onclick="editFunc(event)"></i>
+                                        <button type="button" class="m-1 btn-edit" data-id="${item.id}" id="edit" onclick="editFunc(event)">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </button>
                                         <button type="button"  data-id="${item.id}" data-title="${item.title}" data-time="${item.dueDate}" class="btn-delete" id="delete" onclick="deleteFunc(event)">
                                             <i class="bi bi-trash m-1"></i>
                                         </button>
@@ -292,7 +299,6 @@ function paginationBtn(page ,items){
 
 todos.addEventListener('click', getData);
 submit.addEventListener('click', validate);
-save.addEventListener('click', validate);
 
 
 //modal

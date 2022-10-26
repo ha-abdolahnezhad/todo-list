@@ -12,8 +12,14 @@
 .btn-delete {
     background-color: inherit;
     border: none;
+    cursor: pointer;
 }
 
+.btn-edit {
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+}
 .box:hover .icon {
     visibility: visible;
 }
